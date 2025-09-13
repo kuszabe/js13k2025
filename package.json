@@ -1,0 +1,16 @@
+{
+  "name": "js13k2025",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "esbuild"
+  },
+  "dependencies": {
+    "esbuild": "^0.25.9"
+  }
+}
