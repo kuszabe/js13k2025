@@ -25,7 +25,8 @@ ctx.textAlign = "center"
 
 let running = true
 
-let [macska_img, hatter_img, counter_img, coffee_img, filled_coffe_img, interact_img, telifőzőcsésze_image, féligtelifőzőcsésze_img, üresfőzőcsésze_image, kávéfőző_img, kávéfőzőcsészével_img, kávéfőzőcsészeteli_img, kávéfőzőfej_img, gőz1, tej_img] = await importImages([
+//some of these are still hungarian, i didn't have time to rename everything to english
+let [macska_img, hatter_img, counter_img, coffee_img, filled_coffe_img, interact_img, telifőzőcsésze_image, féligtelifőzőcsésze_img, üresfőzőcsésze_image, kávéfőző_img, kávéfőzőcsészével_img, kávéfőzőcsészeteli_img, kávéfőzőfej_img, smoke1, tej_img] = await importImages([
 	"macska.svg",
 	"hatter.svg",
 	"elso_counter.svg",
@@ -43,7 +44,7 @@ let [macska_img, hatter_img, counter_img, coffee_img, filled_coffe_img, interact
 	"tej.svg"
 ]);
 
-let gőz2 = (() => {
+let smoke2 = (() => {
 	let canvas = document.createElement("canvas");
 	canvas.width = 100;
 	canvas.height = 100;
@@ -51,7 +52,7 @@ let gőz2 = (() => {
 	ctx.save();
 	ctx.translate(100, 0);
 	ctx.scale(-1, 1);
-	ctx.drawImage(gőz1, 0, 0, 100, 100);
+	ctx.drawImage(smoke1, 0, 0, 100, 100);
 	ctx.restore();
 	let img = new Image();
 	img.src = canvas.toDataURL();
@@ -61,49 +62,49 @@ let gőz2 = (() => {
 const SPEED = 7;
 const MAXWOBBLE = 0.04
 const WOBBLESPEED = 0.007
-let macska = { image: macska_img, pos: new Vec2(500, 500), anchor: {x:0.6, y:1}, width: 100, height: 100, rot: 0, wobble_target: 0};
-let hatter = { image: hatter_img, pos: new Vec2(0,0), width: 1600, height: 1000 };
+let cat = { image: macska_img, pos: new Vec2(500, 500), anchor: {x:0.6, y:1}, width: 100, height: 100, rot: 0, wobble_target: 0};
+let background = { image: hatter_img, pos: new Vec2(0,0), width: 1600, height: 1000 };
 let counter = { image: counter_img, pos: new Vec2(600, 400+369), anchor: {x: 0, y: 1}, width: 241, height: 369 };
 let interactsign = { image: interact_img, anchor: {x:0.5, y: 1.4}, pos: new Vec2(0,0), width: 100, height: 100 }
 let showinteractsign = false
 
 const COUNTEROFFSET = new Vec2(600, 400)
 
-const KAVEFŐZŐ_SCALE = 1.2
+const COFFEE_MACHINE_SCALE = 1.2
 const CAFE_COOK_TIME = 5000
 const CAFFE_COOK_ANIM_FRAME = 500
 const KAVEFŐZŐ_INTERACT = new Vec2(1150, 300)
 const GŐZ_POS = new Vec2(1100, 150)
-let gőz_state = 0
-const KÁVÉFŐZŐ_X = 1100
-const KÁVÉFŐZŐ_Y = 250
-const KÁVÉFŐZŐ_ANIM = 0
-const KÁVÉFŐZŐ_BASE_WIDTH = 98.762*KAVEFŐZŐ_SCALE
-const KÁVÉFŐZŐ_BASE_HEIGHT = 88.567*KAVEFŐZŐ_SCALE
-const KÁVÉFŐZŐCSÉSZE_WIDTH = 104.860 * KAVEFŐZŐ_SCALE
-let kávéfőző_csésze = null
-let kávéfőző_cooking = false
-let kávéfőző_state = 0
+let smoke_state = 0
+const COFFEE_MACHINE_X = 1100
+const COFFEE_MACHINE_Y = 250
+const COFFEE_MACHINE_ANIM = 0
+const COFFEE_MACHINE_BASE_WIDTH = 98.762*COFFEE_MACHINE_SCALE
+const COFFEE_MACHINE_BASE_HEIGHT = 88.567*COFFEE_MACHINE_SCALE
+const COFFEE_MACHINE_WITH_CUP_WIDTH = 104.860 * COFFEE_MACHINE_SCALE
+let coffee_machine_cup = null
+let coffee_machine_cooking = false
+let coffee_machine_state = 0
 
-function renderKávéfőző() {
-	ctx.drawImage(kávéfőző_img, KÁVÉFŐZŐ_X, KÁVÉFŐZŐ_Y, KÁVÉFŐZŐ_BASE_WIDTH, KÁVÉFŐZŐ_BASE_HEIGHT)
-	switch (kávéfőző_state) {
+function renderCoffeeMachine() {
+	ctx.drawImage(kávéfőző_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_BASE_WIDTH, COFFEE_MACHINE_BASE_HEIGHT)
+	switch (coffee_machine_state) {
 		case 0: break
 		case 1: 
-			ctx.drawImage(kávéfőzőcsészével_img, KÁVÉFŐZŐ_X, KÁVÉFŐZŐ_Y, KÁVÉFŐZŐCSÉSZE_WIDTH, KÁVÉFŐZŐ_BASE_HEIGHT)
+			ctx.drawImage(kávéfőzőcsészével_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_WITH_CUP_WIDTH, COFFEE_MACHINE_BASE_HEIGHT)
 			break
 		case 2: 
-			ctx.drawImage(kávéfőzőcsészeteli_img, KÁVÉFŐZŐ_X, KÁVÉFŐZŐ_Y, KÁVÉFŐZŐCSÉSZE_WIDTH, KÁVÉFŐZŐ_BASE_HEIGHT)
+			ctx.drawImage(kávéfőzőcsészeteli_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_WITH_CUP_WIDTH, COFFEE_MACHINE_BASE_HEIGHT)
 			break
 	}
-	ctx.drawImage(kávéfőzőfej_img, KÁVÉFŐZŐ_X, KÁVÉFŐZŐ_Y, KÁVÉFŐZŐ_BASE_WIDTH, KÁVÉFŐZŐ_BASE_HEIGHT)
+	ctx.drawImage(kávéfőzőfej_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_BASE_WIDTH, COFFEE_MACHINE_BASE_HEIGHT)
 }
 
-let főzőcsésze = newItem({image: üresfőzőcsésze_image, width: 67, height: 67, type: "főzőcsésze", fill: "none"})
-főzőcsésze.pos = new Vec2(1200, 400)
+let brewing_cup = newItem({image: üresfőzőcsésze_image, width: 67, height: 67, type: "főzőcsésze", fill: "none"})
+brewing_cup.pos = new Vec2(1200, 400)
 
-let tej = newItem({image: tej_img, width: 70, height: 70, type: "tej"})
-tej.pos = new Vec2(1300, 600)
+let milk = newItem({image: tej_img, width: 70, height: 70, type: "tej"})
+milk.pos = new Vec2(1300, 600)
 
 let costumers = []
 let costumerTime = 15000
@@ -112,7 +113,7 @@ let remainingCostumers
 let level = 1
 
 function initStage() {
-	renderList = [macska, főzőcsésze,tej]
+	renderList = [cat, brewing_cup,milk]
 	remainingCostumers = costumerCount
 	setTimeout(costumerLoopCallback, 1000)
 	setTimeout(costumerCleanupLoopCallback, 20000)
@@ -160,10 +161,12 @@ const CUPBOARD_POS = new Vec2(930, 300)
 
 //ACTION
 let currentAction
+//this function looks for actions that can be taken by the player and if there is one it displays the interact_sign(the letter e in a  bubble)
+//it sets the currentAction, then the EPress function does said action
 function findAction() {
 	if (!equippedItem) { // find equipable items
 		//check if there is a főzőcsésze in the coffee machine
-		if (kávéfőző_csésze != null && macska.pos.distance(KAVEFŐZŐ_INTERACT) < INTERACT_DIST && !kávéfőző_cooking) {
+		if (coffee_machine_cup != null && cat.pos.distance(KAVEFŐZŐ_INTERACT) < INTERACT_DIST && !coffee_machine_cooking) {
 			interactsign.pos = KAVEFŐZŐ_INTERACT
 			showinteractsign = true
 			currentAction = {type: "take-főzőcsésze"}
@@ -171,7 +174,7 @@ function findAction() {
 		}
 		
 		//check the cupboard
-		if (macska.pos.distance(CUPBOARD_POS) < 200) {
+		if (cat.pos.distance(CUPBOARD_POS) < 200) {
 			interactsign.pos = CUPBOARD_POS
 			showinteractsign = true
 			currentAction = {type: "cupboard"}
@@ -179,16 +182,16 @@ function findAction() {
 		}
 		
 		//check for pickupable items
-		let item = lookForPickupableItems(macska.pos)
+		let item = lookForPickupableItems(cat.pos)
 		if (item) {
 			interactsign.pos = item.pos
 			showinteractsign = true
 			currentAction = {type: "pickup", item}
 			return
 		}
-	} else if (equippedItem == főzőcsésze) {
+	} else if (equippedItem == brewing_cup) {
 		//the player is holding a főzőcsésze that can be placed into the coffee machine
-		if (macska.pos.distance(KAVEFŐZŐ_INTERACT) < INTERACT_DIST && kávéfőző_csésze == null) {
+		if (cat.pos.distance(KAVEFŐZŐ_INTERACT) < INTERACT_DIST && coffee_machine_cup == null) {
 			interactsign.pos = KAVEFŐZŐ_INTERACT
 			showinteractsign = true
 			currentAction = {type: "place-főzőcsésze"}
@@ -196,8 +199,8 @@ function findAction() {
 		}
 
 		//pour coffee into a cup
-		if (főzőcsésze.fill == "full" || főzőcsésze.fill == "half") {
-			let item = findItem("cup", macska.pos)
+		if (brewing_cup.fill == "full" || brewing_cup.fill == "half") {
+			let item = findItem("cup", cat.pos)
 			if (item) {
 				interactsign.pos = item.pos
 				showinteractsign = true
@@ -205,8 +208,9 @@ function findAction() {
 				return
 			}
 		}
-	} else if (equippedItem == tej) {
-		let kávé = findItem("coffee", macska.pos)
+	} else if (equippedItem == milk) {
+		//the player has the milk equipped, it check if it can be poured
+		let kávé = findItem("coffee", cat.pos)
 		if (kávé && (kávé.content.tej < 2 || kávé.content.tej == null)) {
 			interactsign.pos = kávé.pos
 			showinteractsign = true
@@ -215,9 +219,9 @@ function findAction() {
 		}
 	} else {
 		//check if in interaction distance with npc's
-		let closest_npc = costumers.filter(val => val.pos.distance(macska.pos) < INTERACT_DIST)
+		let closest_npc = costumers.filter(val => val.pos.distance(cat.pos) < INTERACT_DIST)
 		if (closest_npc.length != 0) {
-			closest_npc = costumers.reduce((prev, cur) => prev.pos.distance(macska.pos) < cur.pos.distance(macska.pos) ? prev : cur)
+			closest_npc = costumers.reduce((prev, cur) => prev.pos.distance(cat.pos) < cur.pos.distance(cat.pos) ? prev : cur)
 			currentAction = {type: "give-item", npc: closest_npc}
 			showinteractsign = false
 			return
@@ -260,36 +264,40 @@ function update(timestamp) {
 
 function renderEquippedItem() {
 	if (equippedItem) {
-		equippedItem.pos = macska.pos.add(new Vec2(-5, -100))
+		equippedItem.pos = cat.pos.add(new Vec2(-5, -100))
 		renderGameObj(ctx, equippedItem)
 	};
 }
 
+///this test if the cat should be rendered before or behind the counter
 function testIfMacskaBeforeCounter() {
-	if (macska.pos.y > counter.pos.y) {
+	if (cat.pos.y > counter.pos.y) {
 		return true
-	} else if (macska.pos.y < counter.pos.y-200) {
+	} else if (cat.pos.y < counter.pos.y-200) {
 		return false
 	} else {
-		return righterThanCounter(macska.pos) < 0
+		return righterThanCounter(cat.pos) < 0
 	}
 }
 
 function render() {
 	ctx.fillStyle = "black"
 	ctx.clearRect(0,0,1600, 1000)
-	renderGameObj(ctx, hatter)
-	renderKávéfőző()
+	renderGameObj(ctx, background)
+	renderCoffeeMachine()
+	// this sorts the renderList so that object things are rendered respective to their y level
+	// the only thing that reqires special handling is the counter
+	// the counter always renders together with the cat, because if it cannot be ordered nnormally based on y level
 	renderList.sort(sceneSortFunction).forEach(value => {
-		if (value == macska) {
+		if (value == cat) {
 			let is_before_counter = testIfMacskaBeforeCounter()
 			
 			if (is_before_counter) {
 				renderGameObj(ctx, counter)
 				renderEquippedItem()
-				renderGameObj(ctx, macska)
+				renderGameObj(ctx, cat)
 			} else {
-				renderGameObj(ctx, macska)
+				renderGameObj(ctx, cat)
 				renderEquippedItem()
 				renderGameObj(ctx, counter)
 			}
@@ -300,9 +308,9 @@ function render() {
 		}
 	})
 
-	if (kávéfőző_cooking) {
-		if (gőz_state == 0) ctx.drawImage(gőz1, GŐZ_POS.x, GŐZ_POS.y, 100, 100);
-		else ctx.drawImage(gőz2, GŐZ_POS.x, GŐZ_POS.y, 100, 100);
+	if (coffee_machine_cooking) {
+		if (smoke_state == 0) ctx.drawImage(smoke1, GŐZ_POS.x, GŐZ_POS.y, 100, 100);
+		else ctx.drawImage(smoke2, GŐZ_POS.x, GŐZ_POS.y, 100, 100);
 	}
 
 	
@@ -326,38 +334,41 @@ function righterThanCounter(pos) {
 
 
 function updateCat(dt) {
-	if (keys.w) macska.pos.y -= SPEED * dt;
-	if (keys.s) macska.pos.y += SPEED * dt;
-	if (keys.a) macska.pos.x -= SPEED * dt;
-	if (keys.d) macska.pos.x += SPEED * dt;
+	//this moves 
+	if (keys.w) cat.pos.y -= SPEED * dt;
+	if (keys.s) cat.pos.y += SPEED * dt;
+	if (keys.a) cat.pos.x -= SPEED * dt;
+	if (keys.d) cat.pos.x += SPEED * dt;
 
 	if (keys.w || keys.s || keys.a || keys.d) {
 		//set the wobble if the cat is moving
-		if (macska.wobble_target == 0) {
-			macska.wobble_target = MAXWOBBLE
-		} else if (Math.abs(macska.rot) == MAXWOBBLE) {
-			macska.wobble_target *= -1
+		if (cat.wobble_target == 0) {
+			cat.wobble_target = MAXWOBBLE
+		} else if (Math.abs(cat.rot) == MAXWOBBLE) {
+			cat.wobble_target *= -1
 		}
 	} else {
-		macska.wobble_target = 0
+		cat.wobble_target = 0
 	}
 
 	//make the cat wobble
-	if (Math.abs(macska.wobble_target - macska.rot) < WOBBLESPEED) {
-		macska.rot = macska.wobble_target
+	if (Math.abs(cat.wobble_target - cat.rot) < WOBBLESPEED) {
+		cat.rot = cat.wobble_target
 	} else {
-		let dist = macska.wobble_target - macska.rot
+		let dist = cat.wobble_target - cat.rot
 		let sign = dist / Math.abs(dist)
-		macska.rot += WOBBLESPEED * sign
+		cat.rot += WOBBLESPEED * sign
 	}
 
 	//here the collision detection shall be done
-	check_collision(macska.pos);
+	check_collision(cat.pos);
 }
 
+//this places as item
 function QPress() {
 	if (equippedItem) {
-		let placepos = findCounter(macska.pos)
+		//findCounter finds the closest spot on the counter if it is in range
+		let placepos = findCounter(cat.pos)
 		if (placepos) {
 			let item = unEquipItem()
 			item.pos = placepos
@@ -367,6 +378,7 @@ function QPress() {
 	}
 }
 
+//if there is current action this function executes it(eq.: picking up an item, or giving an item to a costumer)
 function EPress() {
 	if (!currentAction) return;
 	switch (currentAction.type) {
@@ -382,17 +394,17 @@ function EPress() {
 		}
 		case "place-főzőcsésze": {
 			let csésze = unEquipItem()
-			kávéfőző_csésze = csésze
-			kávéfőző_state = 1
-			kávéfőző_cooking = true
+			coffee_machine_cup = csésze
+			coffee_machine_state = 1
+			coffee_machine_cooking = true
 
 			let anim_interval = setInterval(() => {
-				if (gőz_state == 0) gőz_state = 1; else gőz_state = 0;
+				if (smoke_state == 0) smoke_state = 1; else smoke_state = 0;
 			}, CAFFE_COOK_ANIM_FRAME)
 
 			setTimeout(() => {
-				kávéfőző_cooking = false
-				kávéfőző_state = 2
+				coffee_machine_cooking = false
+				coffee_machine_state = 2
 				csésze.fill = "full"
 				csésze.image = telifőzőcsésze_image
 				clearInterval(anim_interval)
@@ -400,9 +412,9 @@ function EPress() {
 			break
 		}
 		case "take-főzőcsésze": {
-			kávéfőző_state = 0
-			equipItem(kávéfőző_csésze)
-			kávéfőző_csésze = null
+			coffee_machine_state = 0
+			equipItem(coffee_machine_cup)
+			coffee_machine_cup = null
 			break
 		}
 		case "pour-coffee": {
@@ -438,5 +450,6 @@ function EPress() {
 	}
 }
 
+//diplaymenu displays the menu, then waits for a keypress before continuing
 await displayMenu(ctx, "Black Cat Caffee", 1)
 initStage()

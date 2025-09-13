@@ -1,1 +1,701 @@
-function e(e){return e[Math.floor(Math.random()*e.length)]}var t=class e{constructor(e,t){this.x=e,this.y=t}sub(t){return new e(this.x-t.x,this.y-t.y)}add(t){return new e(this.x+t.x,this.y+t.y)}scale(t){return new e(this.x*t,this.y*t)}len(){return Math.sqrt(this.x**2+this.y**2)}normal(){let t=this.len();return new e(this.x/t,this.y/t)}dot(e){return this.x*e.x+this.y*e.y}distance(e){return Math.sqrt(Math.pow(this.x-e.x,2)+Math.pow(this.y-e.y,2))}perp(){return new e(-this.y,this.x)}set(e){this.x=e.x,this.y=e.y}},s=new t(600,400),n=[[new t(0,155),new t(155,365),new t(240,365),new t(85,155)].map((e=>e.add(s))),[new t(1354,841),new t(1500,841),new t(1200,413),new t(1050,413)]],i=[{pos:new t(1600,1e3),dir:new t(1600,1e3).sub(new t(1190,415))},{pos:new t(0,428),dir:new t(1,0)}].map((e=>({pos:e.pos,dir:e.dir.normal().perp()}))),o=20,a=new t(0,-30);function r(e,t,s,n){return e>s&&e<n?n-e:s>e&&s<t?s-t:null}var l=[];function h({...e}){let s={pos:new t(0,0),...e,anchor:{x:.5,y:1}};return l.push(s),s}function c(e,t){let s=l.filter((s=>s.type==e&&s.pos.distance(t)<g));return 0!=s.length?s.reduce(((e,s)=>e.pos.distance(t)<s.pos.distance(t)?e:s)):null}var p=new t(1190,365),d=new t(1400,660),f=p.distance(d),u=d.sub(p).normal(),g=250;function w(e,t){t.anchor?t.rot?(e.save(),e.translate(t.pos.x-t.anchor.x*t.width,t.pos.y-t.anchor.y*t.height),e.rotate(t.rot),e.drawImage(t.image,0,0,t.width,t.height),e.restore()):e.drawImage(t.image,t.pos.x-t.anchor.x*t.width,t.pos.y-t.anchor.y*t.height,t.width,t.height):e.drawImage(t.image,t.pos.x,t.pos.y,t.width,t.height)}function m(e){return Promise.all(e.map((e=>new Promise((t=>{let s=new Image;s.src=e,s.onload=()=>t(s)})))))}var[y,b,v,x]=await m(["ember.svg","dialog.svg","telecsésze.svg","tej.svg"]),k=[{type:"coffee"},{type:"coffee",tej:1},{type:"coffee",tej:2}],z=210,I=new t(480,700),_=[];var j={update(e){if(this.target&&(this.pos.distance(this.target)>this.speed?(this.pos=this.pos.add(this.target.sub(this.pos).normal().scale(this.speed*e)),0==this.wobble_target?this.wobble_target=.03:.03==Math.abs(this.rot)&&(this.wobble_target*=-1)):(Object.assign(this.pos,this.target),this.target=null,this.wobble_target=0)),Math.abs(this.wobble_target-this.rot)<.005)this.rot=this.wobble_target;else{let e=this.wobble_target-this.rot,t=e/Math.abs(e);this.rot+=.005*t}},additionalRender(e){if("order"==this.state){e.drawImage(b,this.pos.x-this.width/2,this.pos.y+-150-this.height);for(let{image:t,x:s}of this.dialogContent)e.drawImage(t,this.pos.x-this.width/2+s,this.pos.y-this.height-95,50,50)}},calcDialogContent(){let e=this.order.flatMap((e=>{let t=[];if("coffee"===e.type)t.push(v),1==e.tej&&t.push(x),2==e.tej&&(t.push(x),t.push(x));return t})),t=100-(50*e.length+0*(e.length-1))/2;this.dialogContent=e.map(((e,s)=>({image:e,x:t+50*s})))},itemDelivered(e){let t=this.order.findIndex((t=>"coffee"==e.content.type&&"coffee"==t.type&&t.tej==e.content.tej));return-1!=t&&(this.order.splice(t,1),0==this.order.length&&this.done(),!0)},done(){this.state="leave",this.target=new t(-200,1e3),_.splice(_.indexOf(this),1),_.forEach(((e,s)=>e.target=new t(I.x-z*s,I.y)))}};function M(e,t,s){return new Promise((n=>{e.fillStyle="white",e.clearRect(0,0,1600,1e3),e.font="30px monospace",e.fillText(t,800,300),e.font="20px monospace",e.fillText(`press any key to start level ${s}`,800,700),setTimeout((()=>{let e=()=>{document.body.removeEventListener("keydown",e),n()};document.body.addEventListener("keydown",e)}),1e3)}))}Array.prototype.remove=function(e){let t=this.indexOf(e);-1!=t&&this.splice(t,1)};var C={};onkeydown=e=>C[e.key]="press"==C[e.key]||"hold"==C[e.key]?"hold":"press",onkeyup=e=>C[e.key]=null;var T=document.getElementsByTagName("canvas")[0].getContext("2d");T.fillStyle="white",T.textAlign="center";var E=!0,[R,D,O,q,A,L,P,S,B,F,N,U,Y,$,G]=await m(["macska.svg","hatter.svg","elso_counter.svg","csésze.svg","telecsésze.svg","interact.svg","telifőzőcsésze.svg","féligtelifőzőcsésze.svg","üresfőzőcsésze.svg","kávéfőző.svg","kávéfőzőcsésze.svg","kávéfőzőcsészeteli.svg","kávéfőzőfej.svg","gőz1.svg","tej.svg"]),H=(()=>{let e=document.createElement("canvas");e.width=100,e.height=100;let t=e.getContext("2d");t.save(),t.translate(100,0),t.scale(-1,1),t.drawImage($,0,0,100,100),t.restore();let s=new Image;return s.src=e.toDataURL(),s})(),J=7,K=.04,Q=.007,V={image:R,pos:new t(500,500),anchor:{x:.6,y:1},width:100,height:100,rot:0,wobble_target:0},W={image:D,pos:new t(0,0),width:1600,height:1e3},X={image:O,pos:new t(600,769),anchor:{x:0,y:1},width:241,height:369},Z={image:L,anchor:{x:.5,y:1.4},pos:new t(0,0),width:100,height:100},ee=!1,te=new t(600,400),se=5e3,ne=500,ie=new t(1150,300),oe=new t(1100,150),ae=0,re=1100,le=250,he=118.5144,ce=88.567*1.2,pe=125.832,de=null,fe=!1,ue=0;var ge=h({image:B,width:67,height:67,type:"főzőcsésze",fill:"none"});ge.pos=new t(1200,400);var we=h({image:G,width:70,height:70,type:"tej"});we.pos=new t(1300,600);var me,ye=[],be=15e3,ve=1,xe=1;function ke(){je=[V,ge,we],me=ve,setTimeout(ze,1e3),setTimeout(Ie,2e4),E=!0,qe(performance.now())}function ze(){if(0==me)return;me-=1;let s=function(){let s=I.x-z*_.length,n=Object.create(j);return n.pos=new t(-300,500),n.width=200,n.height=400,n.image=y,n.anchor={x:.5,y:1},n.target=new t(s,I.y),n.speed=4,n.state="order",n.order=[e(k)],n.left=!1,n.dialogContent=[],n.calcDialogContent(),n.rot=0,n.wobble_target=0,_.push(n),n}();ye.push(s),je.push(s),E&&setTimeout(ze,be)}function Ie(){if(ye.length>0){let e=ye.length-1;for(;e>-1;)"leave"==ye[e].state&&null==ye[e].target&&ye.splice(e,1),e-=1;0==ye.length&&0==me?_e():setTimeout(Ie,5e3)}else 0==me&&_e()}async function _e(){E=!1,be*=.9,ve+=3,xe+=1,await M(T,"You finished level "+(xe-1),xe),ke()}var je,Me,Ce,Te=new t(930,300);function Ee(){if(Ce)if(Ce==ge){if(V.pos.distance(ie)<g&&null==de)return Z.pos=ie,ee=!0,void(Me={type:"place-főzőcsésze"});if("full"==ge.fill||"half"==ge.fill){let e=c("cup",V.pos);if(e)return Z.pos=e.pos,ee=!0,void(Me={type:"pour-coffee",item:e})}}else if(Ce==we){let e=c("coffee",V.pos);if(e&&(e.content.tej<2||null==e.content.tej))return Z.pos=e.pos,ee=!0,void(Me={type:"pour-milk",item:e})}else{let e=ye.filter((e=>e.pos.distance(V.pos)<g));if(0!=e.length)return e=ye.reduce(((e,t)=>e.pos.distance(V.pos)<t.pos.distance(V.pos)?e:t)),Me={type:"give-item",npc:e},void(ee=!1)}else{if(null!=de&&V.pos.distance(ie)<g&&!fe)return Z.pos=ie,ee=!0,void(Me={type:"take-főzőcsésze"});if(V.pos.distance(Te)<200)return Z.pos=Te,ee=!0,void(Me={type:"cupboard"});let e=function(e){let t=l.filter((t=>t.pos.distance(e)<g));return 0!=t.length?t.reduce(((t,s)=>t.pos.distance(e)<s.pos.distance(e)?t:s)):null}(V.pos);if(e)return Z.pos=e.pos,ee=!0,void(Me={type:"pickup",item:e})}ee=!1,Me=null}function Re(e){(function(e){let t=l.indexOf(e);if(t==l.length-1)l.pop();else if(-1!=t){let e=l.pop();l[t]=e}})(e),Ce=e}function De(){let e=Ce;return Ce=null,e}var Oe=performance.now();function qe(e){if(!E)return;let t=(e-Oe)/16.6666||1;Oe=e;for(let e of ye)e.update(t);(function(e){if(C.w&&(V.pos.y-=J*e),C.s&&(V.pos.y+=J*e),C.a&&(V.pos.x-=J*e),C.d&&(V.pos.x+=J*e),C.w||C.s||C.a||C.d?0==V.wobble_target?V.wobble_target=K:Math.abs(V.rot)==K&&(V.wobble_target*=-1):V.wobble_target=0,Math.abs(V.wobble_target-V.rot)<Q)V.rot=V.wobble_target;else{let e=V.wobble_target-V.rot,t=e/Math.abs(e);V.rot+=Q*t}!function(e){let t=e.add(a);for(let s of n){let n=null,i=[],a=s[s.length-1];for(let e=0;e<s.length;e++){let t=s[e],n=t.sub(a).perp().normal();i.push(n),a=t}for(let e=0;e<s.length;e++){let a=1/0,l=-1/0;for(let t of s){let n=t.sub(s[e]).dot(i[e]);n>l&&(l=n),n<a&&(a=n)}let h=t.sub(s[e]).dot(i[e]),c=r(a,l,h-o,h+o);if(!c){n=null;break}(!n||n.len()>Math.abs(c))&&(n=i[e].scale(-c))}n&&e.set(e.add(n))}for(let s of i){let n=t.sub(s.pos).dot(s.dir)-o;n<0&&e.set(e.add(s.dir.scale(-n)))}}(V.pos)})(t),Ee(),"press"==C.q&&function(){if(Ce){let e=function(e){let t,s=e.sub(p).dot(u);return t=s<0?p:s>f?d:p.add(u.scale(s)),t.distance(e)<g?t:null}(V.pos);if(e){let t=De();t.pos=e,je.push(t),function(e){l.push(e)}(t)}}}(),"press"==C.e&&function(){if(Me)switch(Me.type){case"pickup":je.remove(Me.item),Re(Me.item);break;case"cupboard":Re(h({image:q,width:50,height:50,type:"cup",content:{}}));break;case"place-főzőcsésze":{let e=De();de=e,ue=1,fe=!0;let t=setInterval((()=>{ae=0==ae?1:0}),ne);setTimeout((()=>{fe=!1,ue=2,e.fill="full",e.image=P,clearInterval(t)}),se);break}case"take-főzőcsésze":ue=0,Re(de),de=null;break;case"pour-coffee":{let e=Ce,t=Me.item;switch(e.fill){case"full":e.image=S,e.fill="half";break;case"half":e.image=B,e.fill="none"}t.image=A,t.type="coffee",t.content={type:"coffee"};break}case"give-item":Me.npc.itemDelivered(Ce)&&De();break;case"pour-milk":Me.item.content.tej=(Me.item.content.tej??0)+1}}(),function(){for(let e in C)"press"==C[e]&&(C[e]="hold")}(),T.fillStyle="black",T.clearRect(0,0,1600,1e3),w(T,W),function(){switch(T.drawImage(F,re,le,he,ce),ue){case 0:break;case 1:T.drawImage(N,re,le,pe,ce);break;case 2:T.drawImage(U,re,le,pe,ce)}T.drawImage(Y,re,le,he,ce)}(),je.sort(Le).forEach((e=>{e==V?V.pos.y>X.pos.y||!(V.pos.y<X.pos.y-200)&&function(e){let t=(e.y-Se.y)/Pe.y,s=Se.x+t*Pe.x;return e.x-s}(V.pos)<0?(w(T,X),Ae(),w(T,V)):(w(T,V),Ae(),w(T,X)):(w(T,e),e.additionalRender&&e.additionalRender(T))})),fe&&(0==ae?T.drawImage($,oe.x,oe.y,100,100):T.drawImage(H,oe.x,oe.y,100,100)),ee&&w(T,Z),requestAnimationFrame(qe)}function Ae(){Ce&&(Ce.pos=V.pos.add(new t(-5,-100)),w(T,Ce))}function Le(e,t){return e.pos.y-t.pos.y}var Pe=new t(155,365).add(te).sub(new t(0,155).add(te)),Se=new t(0,155).add(te);await M(T,"Black Cat Caffee",1),ke();
+// utilities.js
+function evenChance(options) {
+  let index = Math.floor(Math.random() * options.length);
+  return options[index];
+}
+var Vec2 = class _Vec2 {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  sub(vec) {
+    return new _Vec2(this.x - vec.x, this.y - vec.y);
+  }
+  add(vec) {
+    return new _Vec2(this.x + vec.x, this.y + vec.y);
+  }
+  scale(input) {
+    return new _Vec2(this.x * input, this.y * input);
+  }
+  len() {
+    return Math.sqrt(this.x ** 2 + this.y ** 2);
+  }
+  normal() {
+    let magnitude = this.len();
+    return new _Vec2(this.x / magnitude, this.y / magnitude);
+  }
+  dot(vec) {
+    return this.x * vec.x + this.y * vec.y;
+  }
+  distance(vec) {
+    return Math.sqrt(Math.pow(this.x - vec.x, 2) + Math.pow(this.y - vec.y, 2));
+  }
+  perp() {
+    return new _Vec2(-this.y, this.x);
+  }
+  set(vec) {
+    this.x = vec.x;
+    this.y = vec.y;
+  }
+};
+
+// collision.js
+var ELSO_COUNTER_OFFSET = new Vec2(600, 400);
+var ELSO_COUNTER_COLLISION_POINTS = [new Vec2(0, 155), new Vec2(155, 365), new Vec2(240, 365), new Vec2(85, 155)].map((point) => point.add(ELSO_COUNTER_OFFSET));
+var MASODIK_COUNTER_COLLISION_POINTS = [new Vec2(1354, 841), new Vec2(1500, 841), new Vec2(1200, 413), new Vec2(1050, 413)];
+var POLYS = [ELSO_COUNTER_COLLISION_POINTS, MASODIK_COUNTER_COLLISION_POINTS];
+var FALAK = [
+  { pos: new Vec2(1600, 1e3), dir: new Vec2(1600, 1e3).sub(new Vec2(1190, 415)) },
+  { pos: new Vec2(0, 428), dir: new Vec2(1, 0) }
+].map((val) => ({ pos: val.pos, dir: val.dir.normal().perp() }));
+var RADIUS = 20;
+var MACSKAOFFSET = new Vec2(0, -30);
+function check_collision(macska_pos) {
+  const circ_pos = macska_pos.add(MACSKAOFFSET);
+  for (const points of POLYS) {
+    let MTV = null;
+    let axes = [];
+    let prevpoint = points[points.length - 1];
+    for (let i = 0; i < points.length; i++) {
+      let point = points[i];
+      let axis = point.sub(prevpoint).perp().normal();
+      axes.push(axis);
+      prevpoint = point;
+    }
+    for (let i = 0; i < points.length; i++) {
+      let min = Infinity;
+      let max = -Infinity;
+      for (let point of points) {
+        let scalar = point.sub(points[i]).dot(axes[i]);
+        if (scalar > max) max = scalar;
+        if (scalar < min) min = scalar;
+      }
+      let projcircpos = circ_pos.sub(points[i]).dot(axes[i]);
+      let circmax = projcircpos + RADIUS;
+      let circmin = projcircpos - RADIUS;
+      let overlap = testPoints(min, max, circmin, circmax);
+      if (overlap) {
+        if (!MTV || MTV.len() > Math.abs(overlap)) {
+          MTV = axes[i].scale(-overlap);
+        }
+      } else {
+        MTV = null;
+        break;
+      }
+    }
+    if (MTV) {
+      macska_pos.set(macska_pos.add(MTV));
+    }
+  }
+  for (const fal of FALAK) {
+    let projcircpos = circ_pos.sub(fal.pos).dot(fal.dir);
+    let circmin = projcircpos - RADIUS;
+    if (circmin < 0) {
+      macska_pos.set(macska_pos.add(fal.dir.scale(-circmin)));
+    }
+  }
+}
+function testPoints(min1, max1, min2, max2) {
+  if (min1 > min2 && min1 < max2) {
+    return max2 - min1;
+  } else if (min2 > min1 && min2 < max1) {
+    return min2 - max1;
+  } else return null;
+}
+
+// items.js
+var items = [];
+function newItem({ ...things }) {
+  let item = { pos: new Vec2(0, 0), ...things, anchor: { x: 0.5, y: 1 } };
+  items.push(item);
+  return item;
+}
+function addItem(item) {
+  items.push(item);
+}
+function findItem(type, player_pos) {
+  let itemsInRange = items.filter((item) => item.type == type && item.pos.distance(player_pos) < INTERACT_DIST);
+  if (itemsInRange.length != 0) {
+    return itemsInRange.reduce((prev, cur) => prev.pos.distance(player_pos) < cur.pos.distance(player_pos) ? prev : cur);
+  } else return null;
+}
+function removeItem(item) {
+  let index = items.indexOf(item);
+  if (index == items.length - 1) {
+    items.pop();
+  } else if (index != -1) {
+    let replacer = items.pop();
+    items[index] = replacer;
+  }
+}
+var COUNTERTOPSTART = new Vec2(1190, 365);
+var COUNTERTOPEND = new Vec2(1400, 660);
+var COUNTERLENGTH = COUNTERTOPSTART.distance(COUNTERTOPEND);
+var COUNTERDIR = COUNTERTOPEND.sub(COUNTERTOPSTART).normal();
+var INTERACT_DIST = 250;
+function findCounter(position) {
+  let scalar = position.sub(COUNTERTOPSTART).dot(COUNTERDIR);
+  let point;
+  if (scalar < 0) {
+    point = COUNTERTOPSTART;
+  } else if (scalar > COUNTERLENGTH) {
+    point = COUNTERTOPEND;
+  } else {
+    point = COUNTERTOPSTART.add(COUNTERDIR.scale(scalar));
+  }
+  if (point.distance(position) < INTERACT_DIST) {
+    return point;
+  } else {
+    return null;
+  }
+}
+function lookForPickupableItems(position) {
+  let itemsInRange = items.filter((item) => item.pos.distance(position) < INTERACT_DIST);
+  if (itemsInRange.length != 0) {
+    return itemsInRange.reduce((prev, cur) => prev.pos.distance(position) < cur.pos.distance(position) ? prev : cur);
+  } else return null;
+}
+
+// graphiclib.js
+function renderGameObj(ctx2, gameobj) {
+  if (gameobj.anchor) {
+    if (gameobj.rot) {
+      ctx2.save();
+      ctx2.translate(gameobj.pos.x - gameobj.anchor.x * gameobj.width, gameobj.pos.y - gameobj.anchor.y * gameobj.height);
+      ctx2.rotate(gameobj.rot);
+      ctx2.drawImage(gameobj.image, 0, 0, gameobj.width, gameobj.height);
+      ctx2.restore();
+    } else {
+      ctx2.drawImage(gameobj.image, gameobj.pos.x - gameobj.anchor.x * gameobj.width, gameobj.pos.y - gameobj.anchor.y * gameobj.height, gameobj.width, gameobj.height);
+    }
+  } else {
+    ctx2.drawImage(gameobj.image, gameobj.pos.x, gameobj.pos.y, gameobj.width, gameobj.height);
+  }
+}
+function importImages(images) {
+  return Promise.all(images.map((path) => {
+    return new Promise((resolve) => {
+      let image = new Image();
+      image.src = path;
+      image.onload = () => resolve(image);
+    });
+  }));
+}
+
+// costumer.js
+var [human_img, empty_dialog_img, coffee_mug_img, tej_img] = await importImages(["ember.svg", "dialog.svg", "telecs\xE9sze.svg", "tej.svg"]);
+var ICON_SIZE = 50;
+var ICON_PADDING = 0;
+var DIALOG_MID_X = 100;
+var DIALOG_ICON_Y_OFFSET = -70 - ICON_SIZE / 2;
+var DIALOG_Y_OFFSET = -150;
+var MAXWOBBLE = 0.03;
+var WOBBLESPEED = 5e-3;
+var CAFFEE_OPTS = [
+  { type: "coffee" },
+  { type: "coffee", tej: 1 },
+  { type: "coffee", tej: 2 }
+];
+var COSUTMER_OFFSET = 210;
+var LINE_START = new Vec2(480, 700);
+var costumerLine = [];
+function addCostumerToLine() {
+  let costumer_x = LINE_START.x - COSUTMER_OFFSET * costumerLine.length;
+  let obj = Object.create(Customer);
+  obj.pos = new Vec2(-300, 500);
+  obj.width = 200;
+  obj.height = 400;
+  obj.image = human_img;
+  obj.anchor = { x: 0.5, y: 1 };
+  obj.target = new Vec2(costumer_x, LINE_START.y);
+  obj.speed = 4;
+  obj.state = "order";
+  obj.order = [evenChance(CAFFEE_OPTS)];
+  obj.left = false;
+  obj.dialogContent = [];
+  obj.calcDialogContent();
+  obj.rot = 0;
+  obj.wobble_target = 0;
+  costumerLine.push(obj);
+  return obj;
+}
+function advanceLine() {
+  costumerLine.forEach((costumer, index) => costumer.target = new Vec2(LINE_START.x - COSUTMER_OFFSET * index, LINE_START.y));
+}
+var Customer = {
+  //this handles moving the costumer ot a set target and the wobble animation
+  update(dt) {
+    if (this.target) {
+      if (this.pos.distance(this.target) > this.speed) {
+        this.pos = this.pos.add(this.target.sub(this.pos).normal().scale(this.speed * dt));
+        if (this.wobble_target == 0) {
+          this.wobble_target = MAXWOBBLE;
+        } else if (Math.abs(this.rot) == MAXWOBBLE) {
+          this.wobble_target *= -1;
+        }
+      } else {
+        Object.assign(this.pos, this.target);
+        this.target = null;
+        this.wobble_target = 0;
+      }
+    }
+    if (Math.abs(this.wobble_target - this.rot) < WOBBLESPEED) {
+      this.rot = this.wobble_target;
+    } else {
+      let dist = this.wobble_target - this.rot;
+      let sign = dist / Math.abs(dist);
+      this.rot += WOBBLESPEED * sign;
+    }
+  },
+  //this renders their order in the diealog above the costumers head
+  additionalRender(ctx2) {
+    if (this.state == "order") {
+      ctx2.drawImage(empty_dialog_img, this.pos.x - this.width / 2, this.pos.y + DIALOG_Y_OFFSET - this.height);
+      for (let { image, x } of this.dialogContent) {
+        ctx2.drawImage(image, this.pos.x - this.width / 2 + x, this.pos.y - this.height + DIALOG_ICON_Y_OFFSET, ICON_SIZE, ICON_SIZE);
+      }
+    }
+  },
+  //this calculet what should be in the dialog and how it should be laid out
+  calcDialogContent() {
+    let images = this.order.flatMap((piece) => {
+      let output = [];
+      switch (piece.type) {
+        case "coffee": {
+          output.push(coffee_mug_img);
+          if (piece.tej == 1) output.push(tej_img);
+          if (piece.tej == 2) {
+            output.push(tej_img);
+            output.push(tej_img);
+          }
+          break;
+        }
+      }
+      return output;
+    });
+    let icons_width = images.length * ICON_SIZE + (images.length - 1) * ICON_PADDING;
+    let icons_start = DIALOG_MID_X - icons_width / 2;
+    this.dialogContent = images.map((image, index) => {
+      let x = icons_start + index * (ICON_SIZE + ICON_PADDING);
+      return { image, x };
+    });
+  },
+  //this gets called when an item is delivered
+  itemDelivered(item) {
+    let index = this.order.findIndex((val) => item.content.type == "coffee" && val.type == "coffee" && val.tej == item.content.tej);
+    if (index != -1) {
+      this.order.splice(index, 1);
+      if (this.order.length == 0) {
+        this.done();
+      }
+      return true;
+    } else {
+      return false;
+    }
+  },
+  done() {
+    this.state = "leave";
+    this.target = new Vec2(-200, 1e3);
+    costumerLine.splice(costumerLine.indexOf(this), 1);
+    advanceLine();
+  }
+};
+
+// menu.js
+function displayMenu(ctx2, title, level2) {
+  return new Promise((resolve) => {
+    ctx2.fillStyle = "white";
+    ctx2.clearRect(0, 0, 1600, 1e3);
+    ctx2.font = "30px monospace";
+    ctx2.fillText(title, 800, 300);
+    ctx2.font = "20px monospace";
+    ctx2.fillText(`press any key to start level ${level2}`, 800, 700);
+    setTimeout(() => {
+      let eventlistener = () => {
+        document.body.removeEventListener("keydown", eventlistener);
+        resolve();
+      };
+      document.body.addEventListener("keydown", eventlistener);
+    }, 1e3);
+  });
+}
+
+// main.js
+Array.prototype.remove = function(thing) {
+  const i = this.indexOf(thing);
+  if (i != -1) this.splice(i, 1);
+};
+var keys = {};
+onkeydown = (event) => keys[event.key] = keys[event.key] == "press" || keys[event.key] == "hold" ? "hold" : "press";
+onkeyup = (event) => keys[event.key] = null;
+function testForKeyHolding() {
+  for (const key in keys) {
+    if (keys[key] == "press") keys[key] = "hold";
+  }
+}
+var ctx = document.getElementsByTagName("canvas")[0].getContext("2d");
+ctx.fillStyle = "white";
+ctx.textAlign = "center";
+var running = true;
+var [macska_img, hatter_img, counter_img, coffee_img, filled_coffe_img, interact_img, telif\u0151z\u0151cs\u00E9sze_image, f\u00E9ligtelif\u0151z\u0151cs\u00E9sze_img, \u00FCresf\u0151z\u0151cs\u00E9sze_image, k\u00E1v\u00E9f\u0151z\u0151_img, k\u00E1v\u00E9f\u0151z\u0151cs\u00E9sz\u00E9vel_img, k\u00E1v\u00E9f\u0151z\u0151cs\u00E9szeteli_img, k\u00E1v\u00E9f\u0151z\u0151fej_img, smoke1, tej_img2] = await importImages([
+  "macska.svg",
+  "hatter.svg",
+  "elso_counter.svg",
+  "cs\xE9sze.svg",
+  "telecs\xE9sze.svg",
+  "interact.svg",
+  "telif\u0151z\u0151cs\xE9sze.svg",
+  "f\xE9ligtelif\u0151z\u0151cs\xE9sze.svg",
+  "\xFCresf\u0151z\u0151cs\xE9sze.svg",
+  "k\xE1v\xE9f\u0151z\u0151.svg",
+  "k\xE1v\xE9f\u0151z\u0151cs\xE9sze.svg",
+  "k\xE1v\xE9f\u0151z\u0151cs\xE9szeteli.svg",
+  "k\xE1v\xE9f\u0151z\u0151fej.svg",
+  "g\u0151z1.svg",
+  "tej.svg"
+]);
+var smoke2 = (() => {
+  let canvas = document.createElement("canvas");
+  canvas.width = 100;
+  canvas.height = 100;
+  let ctx2 = canvas.getContext("2d");
+  ctx2.save();
+  ctx2.translate(100, 0);
+  ctx2.scale(-1, 1);
+  ctx2.drawImage(smoke1, 0, 0, 100, 100);
+  ctx2.restore();
+  let img = new Image();
+  img.src = canvas.toDataURL();
+  return img;
+})();
+var SPEED = 7;
+var MAXWOBBLE2 = 0.04;
+var WOBBLESPEED2 = 7e-3;
+var cat = { image: macska_img, pos: new Vec2(500, 500), anchor: { x: 0.6, y: 1 }, width: 100, height: 100, rot: 0, wobble_target: 0 };
+var background = { image: hatter_img, pos: new Vec2(0, 0), width: 1600, height: 1e3 };
+var counter = { image: counter_img, pos: new Vec2(600, 400 + 369), anchor: { x: 0, y: 1 }, width: 241, height: 369 };
+var interactsign = { image: interact_img, anchor: { x: 0.5, y: 1.4 }, pos: new Vec2(0, 0), width: 100, height: 100 };
+var showinteractsign = false;
+var COUNTEROFFSET = new Vec2(600, 400);
+var COFFEE_MACHINE_SCALE = 1.2;
+var CAFE_COOK_TIME = 5e3;
+var CAFFE_COOK_ANIM_FRAME = 500;
+var KAVEF\u0150Z\u0150_INTERACT = new Vec2(1150, 300);
+var G\u0150Z_POS = new Vec2(1100, 150);
+var smoke_state = 0;
+var COFFEE_MACHINE_X = 1100;
+var COFFEE_MACHINE_Y = 250;
+var COFFEE_MACHINE_BASE_WIDTH = 98.762 * COFFEE_MACHINE_SCALE;
+var COFFEE_MACHINE_BASE_HEIGHT = 88.567 * COFFEE_MACHINE_SCALE;
+var COFFEE_MACHINE_WITH_CUP_WIDTH = 104.86 * COFFEE_MACHINE_SCALE;
+var coffee_machine_cup = null;
+var coffee_machine_cooking = false;
+var coffee_machine_state = 0;
+function renderCoffeeMachine() {
+  ctx.drawImage(k\u00E1v\u00E9f\u0151z\u0151_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_BASE_WIDTH, COFFEE_MACHINE_BASE_HEIGHT);
+  switch (coffee_machine_state) {
+    case 0:
+      break;
+    case 1:
+      ctx.drawImage(k\u00E1v\u00E9f\u0151z\u0151cs\u00E9sz\u00E9vel_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_WITH_CUP_WIDTH, COFFEE_MACHINE_BASE_HEIGHT);
+      break;
+    case 2:
+      ctx.drawImage(k\u00E1v\u00E9f\u0151z\u0151cs\u00E9szeteli_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_WITH_CUP_WIDTH, COFFEE_MACHINE_BASE_HEIGHT);
+      break;
+  }
+  ctx.drawImage(k\u00E1v\u00E9f\u0151z\u0151fej_img, COFFEE_MACHINE_X, COFFEE_MACHINE_Y, COFFEE_MACHINE_BASE_WIDTH, COFFEE_MACHINE_BASE_HEIGHT);
+}
+var brewing_cup = newItem({ image: \u00FCresf\u0151z\u0151cs\u00E9sze_image, width: 67, height: 67, type: "f\u0151z\u0151cs\xE9sze", fill: "none" });
+brewing_cup.pos = new Vec2(1200, 400);
+var milk = newItem({ image: tej_img2, width: 70, height: 70, type: "tej" });
+milk.pos = new Vec2(1300, 600);
+var costumers = [];
+var costumerTime = 15e3;
+var costumerCount = 1;
+var remainingCostumers;
+var level = 1;
+function initStage() {
+  renderList = [cat, brewing_cup, milk];
+  remainingCostumers = costumerCount;
+  setTimeout(costumerLoopCallback, 1e3);
+  setTimeout(costumerCleanupLoopCallback, 2e4);
+  running = true;
+  update(performance.now());
+}
+function costumerLoopCallback() {
+  if (remainingCostumers == 0) return;
+  remainingCostumers -= 1;
+  let costumer = addCostumerToLine();
+  costumers.push(costumer);
+  renderList.push(costumer);
+  if (running) setTimeout(costumerLoopCallback, costumerTime);
+}
+function costumerCleanupLoopCallback() {
+  if (costumers.length > 0) {
+    let i = costumers.length - 1;
+    while (i > -1) {
+      if (costumers[i].state == "leave" && costumers[i].target == null) {
+        costumers.splice(i, 1);
+      }
+      i -= 1;
+    }
+    if (costumers.length == 0 && remainingCostumers == 0) stageFinished();
+    else setTimeout(costumerCleanupLoopCallback, 5e3);
+  } else if (remainingCostumers == 0) {
+    stageFinished();
+  }
+}
+async function stageFinished() {
+  running = false;
+  costumerTime *= 0.9;
+  costumerCount += 3;
+  level += 1;
+  await displayMenu(ctx, `You finished level ${level - 1}`, level);
+  initStage();
+}
+var renderList;
+var CUPBOARD_POS = new Vec2(930, 300);
+var currentAction;
+function findAction() {
+  if (!equippedItem) {
+    if (coffee_machine_cup != null && cat.pos.distance(KAVEF\u0150Z\u0150_INTERACT) < INTERACT_DIST && !coffee_machine_cooking) {
+      interactsign.pos = KAVEF\u0150Z\u0150_INTERACT;
+      showinteractsign = true;
+      currentAction = { type: "take-f\u0151z\u0151cs\xE9sze" };
+      return;
+    }
+    if (cat.pos.distance(CUPBOARD_POS) < 200) {
+      interactsign.pos = CUPBOARD_POS;
+      showinteractsign = true;
+      currentAction = { type: "cupboard" };
+      return;
+    }
+    let item = lookForPickupableItems(cat.pos);
+    if (item) {
+      interactsign.pos = item.pos;
+      showinteractsign = true;
+      currentAction = { type: "pickup", item };
+      return;
+    }
+  } else if (equippedItem == brewing_cup) {
+    if (cat.pos.distance(KAVEF\u0150Z\u0150_INTERACT) < INTERACT_DIST && coffee_machine_cup == null) {
+      interactsign.pos = KAVEF\u0150Z\u0150_INTERACT;
+      showinteractsign = true;
+      currentAction = { type: "place-f\u0151z\u0151cs\xE9sze" };
+      return;
+    }
+    if (brewing_cup.fill == "full" || brewing_cup.fill == "half") {
+      let item = findItem("cup", cat.pos);
+      if (item) {
+        interactsign.pos = item.pos;
+        showinteractsign = true;
+        currentAction = { type: "pour-coffee", item };
+        return;
+      }
+    }
+  } else if (equippedItem == milk) {
+    let k\u00E1v\u00E9 = findItem("coffee", cat.pos);
+    if (k\u00E1v\u00E9 && (k\u00E1v\u00E9.content.tej < 2 || k\u00E1v\u00E9.content.tej == null)) {
+      interactsign.pos = k\u00E1v\u00E9.pos;
+      showinteractsign = true;
+      currentAction = { type: "pour-milk", item: k\u00E1v\u00E9 };
+      return;
+    }
+  } else {
+    let closest_npc = costumers.filter((val) => val.pos.distance(cat.pos) < INTERACT_DIST);
+    if (closest_npc.length != 0) {
+      closest_npc = costumers.reduce((prev, cur) => prev.pos.distance(cat.pos) < cur.pos.distance(cat.pos) ? prev : cur);
+      currentAction = { type: "give-item", npc: closest_npc };
+      showinteractsign = false;
+      return;
+    }
+  }
+  showinteractsign = false;
+  currentAction = null;
+}
+var equippedItem;
+function equipItem(item) {
+  removeItem(item);
+  equippedItem = item;
+}
+function unEquipItem() {
+  let item = equippedItem;
+  equippedItem = null;
+  return item;
+}
+var prevFrame = performance.now();
+function update(timestamp) {
+  if (!running) return;
+  let dt = (timestamp - prevFrame) / 16.6666 || 1;
+  prevFrame = timestamp;
+  for (let costumer of costumers) {
+    costumer.update(dt);
+  }
+  updateCat(dt);
+  findAction();
+  if (keys.q == "press") QPress();
+  if (keys.e == "press") EPress();
+  testForKeyHolding();
+  render();
+}
+function renderEquippedItem() {
+  if (equippedItem) {
+    equippedItem.pos = cat.pos.add(new Vec2(-5, -100));
+    renderGameObj(ctx, equippedItem);
+  }
+  ;
+}
+function testIfMacskaBeforeCounter() {
+  if (cat.pos.y > counter.pos.y) {
+    return true;
+  } else if (cat.pos.y < counter.pos.y - 200) {
+    return false;
+  } else {
+    return righterThanCounter(cat.pos) < 0;
+  }
+}
+function render() {
+  ctx.fillStyle = "black";
+  ctx.clearRect(0, 0, 1600, 1e3);
+  renderGameObj(ctx, background);
+  renderCoffeeMachine();
+  renderList.sort(sceneSortFunction).forEach((value) => {
+    if (value == cat) {
+      let is_before_counter = testIfMacskaBeforeCounter();
+      if (is_before_counter) {
+        renderGameObj(ctx, counter);
+        renderEquippedItem();
+        renderGameObj(ctx, cat);
+      } else {
+        renderGameObj(ctx, cat);
+        renderEquippedItem();
+        renderGameObj(ctx, counter);
+      }
+    } else {
+      renderGameObj(ctx, value);
+      if (value.additionalRender) value.additionalRender(ctx);
+    }
+  });
+  if (coffee_machine_cooking) {
+    if (smoke_state == 0) ctx.drawImage(smoke1, G\u0150Z_POS.x, G\u0150Z_POS.y, 100, 100);
+    else ctx.drawImage(smoke2, G\u0150Z_POS.x, G\u0150Z_POS.y, 100, 100);
+  }
+  if (showinteractsign) renderGameObj(ctx, interactsign);
+  requestAnimationFrame(update);
+}
+function sceneSortFunction(a, b) {
+  return a.pos.y - b.pos.y;
+}
+var SIDE_DIR = new Vec2(155, 365).add(COUNTEROFFSET).sub(new Vec2(0, 155).add(COUNTEROFFSET));
+var SIDE_POS = new Vec2(0, 155).add(COUNTEROFFSET);
+function righterThanCounter(pos) {
+  const t = (pos.y - SIDE_POS.y) / SIDE_DIR.y;
+  const lineX = SIDE_POS.x + t * SIDE_DIR.x;
+  return pos.x - lineX;
+}
+function updateCat(dt) {
+  if (keys.w) cat.pos.y -= SPEED * dt;
+  if (keys.s) cat.pos.y += SPEED * dt;
+  if (keys.a) cat.pos.x -= SPEED * dt;
+  if (keys.d) cat.pos.x += SPEED * dt;
+  if (keys.w || keys.s || keys.a || keys.d) {
+    if (cat.wobble_target == 0) {
+      cat.wobble_target = MAXWOBBLE2;
+    } else if (Math.abs(cat.rot) == MAXWOBBLE2) {
+      cat.wobble_target *= -1;
+    }
+  } else {
+    cat.wobble_target = 0;
+  }
+  if (Math.abs(cat.wobble_target - cat.rot) < WOBBLESPEED2) {
+    cat.rot = cat.wobble_target;
+  } else {
+    let dist = cat.wobble_target - cat.rot;
+    let sign = dist / Math.abs(dist);
+    cat.rot += WOBBLESPEED2 * sign;
+  }
+  check_collision(cat.pos);
+}
+function QPress() {
+  if (equippedItem) {
+    let placepos = findCounter(cat.pos);
+    if (placepos) {
+      let item = unEquipItem();
+      item.pos = placepos;
+      renderList.push(item);
+      addItem(item);
+    }
+  }
+}
+function EPress() {
+  if (!currentAction) return;
+  switch (currentAction.type) {
+    case "pickup": {
+      renderList.remove(currentAction.item);
+      equipItem(currentAction.item);
+      break;
+    }
+    case "cupboard": {
+      let coffee = newItem({ image: coffee_img, width: 50, height: 50, type: "cup", content: {} });
+      equipItem(coffee);
+      break;
+    }
+    case "place-f\u0151z\u0151cs\xE9sze": {
+      let cs\u00E9sze = unEquipItem();
+      coffee_machine_cup = cs\u00E9sze;
+      coffee_machine_state = 1;
+      coffee_machine_cooking = true;
+      let anim_interval = setInterval(() => {
+        if (smoke_state == 0) smoke_state = 1;
+        else smoke_state = 0;
+      }, CAFFE_COOK_ANIM_FRAME);
+      setTimeout(() => {
+        coffee_machine_cooking = false;
+        coffee_machine_state = 2;
+        cs\u00E9sze.fill = "full";
+        cs\u00E9sze.image = telif\u0151z\u0151cs\u00E9sze_image;
+        clearInterval(anim_interval);
+      }, CAFE_COOK_TIME);
+      break;
+    }
+    case "take-f\u0151z\u0151cs\xE9sze": {
+      coffee_machine_state = 0;
+      equipItem(coffee_machine_cup);
+      coffee_machine_cup = null;
+      break;
+    }
+    case "pour-coffee": {
+      let f\u0151z\u0151cs\u00E9sze = equippedItem;
+      let cs\u00E9sze = currentAction.item;
+      switch (f\u0151z\u0151cs\u00E9sze.fill) {
+        case "full": {
+          f\u0151z\u0151cs\u00E9sze.image = f\u00E9ligtelif\u0151z\u0151cs\u00E9sze_img;
+          f\u0151z\u0151cs\u00E9sze.fill = "half";
+          break;
+        }
+        case "half": {
+          f\u0151z\u0151cs\u00E9sze.image = \u00FCresf\u0151z\u0151cs\u00E9sze_image;
+          f\u0151z\u0151cs\u00E9sze.fill = "none";
+          break;
+        }
+      }
+      cs\u00E9sze.image = filled_coffe_img;
+      cs\u00E9sze.type = "coffee";
+      cs\u00E9sze.content = { type: "coffee" };
+      break;
+    }
+    case "give-item": {
+      if (currentAction.npc.itemDelivered(equippedItem)) {
+        unEquipItem();
+      }
+      break;
+    }
+    case "pour-milk": {
+      currentAction.item.content.tej = (currentAction.item.content.tej ?? 0) + 1;
+      break;
+    }
+  }
+}
+await displayMenu(ctx, "Black Cat Caffee", 1);
+initStage();
+//# sourceMappingURL=main.js.map

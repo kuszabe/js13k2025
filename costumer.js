@@ -21,6 +21,7 @@ const CAFFEE_OPTS = [
 const COSUTMER_OFFSET = 210
 const LINE_START = new Vec2(480, 700)
 let costumerLine = []
+//this creates a new costumer and adds it to the line that forms before the counter
 export function addCostumerToLine() {
     let costumer_x = LINE_START.x - COSUTMER_OFFSET * costumerLine.length
     let obj = Object.create(Customer)
@@ -42,11 +43,14 @@ export function addCostumerToLine() {
     return obj
 }
 
+//this advances all costumers in the line to their correct spot
 function advanceLine() {
     costumerLine.forEach((costumer, index) => costumer.target = new Vec2(LINE_START.x - COSUTMER_OFFSET * index, LINE_START.y))
 }
 
+//this is the prototype for the costumers it contains all of their methods
 const Customer = {
+    //this handles moving the costumer ot a set target and the wobble animation
     update(dt) {
         if (this.target) {
             if (this.pos.distance(this.target) > this.speed) {
@@ -72,6 +76,7 @@ const Customer = {
             this.rot += WOBBLESPEED * sign
         }
     },
+    //this renders their order in the diealog above the costumers head
     additionalRender(ctx) {
         if (this.state == "order") {
             ctx.drawImage(empty_dialog_img, this.pos.x-this.width/2, this.pos.y+DIALOG_Y_OFFSET-this.height)
@@ -80,6 +85,7 @@ const Customer = {
             }
         }
     },
+    //this calculet what should be in the dialog and how it should be laid out
     calcDialogContent() {
         let images = this.order.flatMap(piece => {
             let output = []
@@ -100,8 +106,10 @@ const Customer = {
             return {image, x}
         });
     },
+    //this gets called when an item is delivered
     itemDelivered(item) {
         let index = this.order.findIndex(val => item.content.type == "coffee" && val.type == "coffee" && val.tej == item.content.tej)
+        //if the order contained the delivered item return true
         if (index != -1) {
             this.order.splice(index, 1)
             if (this.order.length == 0) {

@@ -1,3 +1,4 @@
+//this is responsible for checking and applying collsiion to the cat, it uses the SAT theorem
 import { Vec2 } from "./utilities"
 
 const ELSO_COUNTER_OFFSET = new Vec2(600, 400)
